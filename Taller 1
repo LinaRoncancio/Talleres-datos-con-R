@@ -1,0 +1,37 @@
+#Taller 1
+#Lina Roncancio - Fredy Gonzalez - Fabian Lasso
+# install.packages("tidyverse")
+library(tidyverse)
+#Punto 3: Escriba una serie de comandos que determinen si un número específico es par o impar.
+
+numero <- 5
+
+if (numero%%2 == 1) {
+  print("Impar")
+  } else {
+  print("Par")
+  }
+
+#Punto 4: 
+nombres <- c("Andrea", "Carlos", "Juan", "Carolina", "Fernando", "Laura")
+
+for (nombre in nombres) {
+  print(paste("Bienvenido", nombre))
+}
+
+#Punto 5: Escriba una función que reciba dos argumentos - el número a y el número b -, que devuelva el número a elevado al número b. Por ejemplo, si a = 2, y b = 3, la función devería devolver 8.
+
+Además, si el usuario no define el número b, la función debería asignar un valor por defecto de 1 a esta variable.
+
+# Posible Solución:
+
+potencia <- function(x = 1, y) {
+  x <- x = 2
+  x <- x ^ y
+            return(x)
+}
+
+potencia <- function(x,y) {
+    x <- 2 ^ 3
+  return(x)
+}
