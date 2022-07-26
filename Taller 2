@@ -1,0 +1,125 @@
+# Análisis de Datos con R - Ejercicios Módulo 2 ----
+
+# Integrantes: Lina Roncancio - Fredy Gonzalez - Fabian Lasso
+
+
+## Fuente de datos: [link](https://www.kaggle.com/datasets/ramjasmaurya/1-gb-internet-price?select=all_csv+sorted.csv).
+## Archivo llamado `all_csv sorted.csv`.
+
+library(tidyverse)
+
+
+## Punto 1. Cargar y explorar la base de datos:
+
+## Cargue la base de datos a su entorno de trabajo, imprima en consola la estructura de la base de datos e imprima las 
+## primeras 10 filas, usando las funciones incluidas en el tidyverse.
+
+### Cargue de la base de Datos:
+data <- read_csv("C:/Users/USER/OneDrive/Desktop/Taller_Modulo_1/all_csv sorted.csv")
+
+### Impresión en la consola de la estructura de la base de datos:
+glimpse(data)
+### Es una base de datos con 243 filas y 13 columnas.
+
+### Impresión de las primeras 10 filas:
+head(data, 10)
+
+
+## Punto 2. Datos faltantes:
+
+## Usando las funciones del paquete naniar, cree un dataframe que muestre el número de datos faltantes para cada una de las 
+## columnas de la base de datos.
+
+### Paquetes naniar:
+library(naniar)
+
+### Creación dataframe para datos faltantes:
+datos_faltantes <- data.frame(miss_var_summary(data))
+
+
+## Punto 3. Manipulación de datos pt. 1:
+
+## Cree una nueva columna que contenga el cambio porcentual en el precio del internet entre 2020 y 2021 y ordene la base de datos 
+## según esa columna. ¿Cuáles son los 10 países en los que el precio incrementó más?
+
+### Creación nueva columna con cambio porcentual "VP" y orden de datos según esta columna:
+data %>%
+  mutate("VP" = (as.numeric(`Average price of 1GB (USD  at the start of 2021)`)-
+                                     as.numeric(`Average price of 1GB (USD – at start of 2020)`))/
+           as.numeric(`Average price of 1GB (USD – at start of 2020)`)*100) %>%
+  arrange(desc(VP)) %>%
+  head(10)
+
+### ¿Cuáles son los 10 países en los que el precio incrementó más?
+
+### Rta: Se evidencia, que debido la falta de algunos datos, el código genera un error "Warning messages":
+### 1: Problem while computing `VP = ... * 100`.
+### ℹ NAs introduced by coercion 
+### 2: Problem while computing `VP = ... * 100`.
+### ℹ NAs introduced by coercion 
+### 3: Problem while computing `VP = ... * 100`.
+### ℹ NAs introduced by coercion 
+
+### De acuerdo con la tabla los 10 países con mayor incremento son:
+#### Country                          VP
+#### 1. Saint Helena, Ascension…      769.
+#### 2. Malawi                        664.
+#### 3. São Tomé and Príncipe         430.
+#### 4. Mauritius                     386.
+#### 5. Spain                         223.
+#### 6. French Polynesia              211.
+#### 7. Eswatini                      154.
+#### 8. Greece                        146.
+#### 9. Gibraltar                     138.
+#### 10. Trinidad and Tobago          120.
+
+
+## Punto 4. Manipulación de datos pt. 2
+
+## Encuentre la velocidad promedio de internet en Megabits para cada una de las regiones incluidas en la variable `Continental 
+## region`. ¿Cuál es la región con el internet más lento?
+
+### Velocidad promedio de internet en Megabits: 
+data %>%
+  group_by(`Continental region`) %>%
+  summarise(velocidad_promedio=mean(
+    `Avg \n(Mbit/s)Ookla`, na.rm=TRUE)) %>%
+  arrange(velocidad_promedio)
+
+### ¿Cuál es la región con el internet más lento?
+
+### Rta: Teniendo en cuenta la tabla arroja se evidencia que la región con internet más lento es
+### SUB-SAHARAN AFRICA                 17.3 Megabits
+
+
+## Punto 5. Gráfico en ggplot2
+  
+## Usando el paquete ggplot2, elabore un gráfico de dispersión con las variables de velocidad promedio y porcentaje de usarios 
+## de internet. ¿Se podría afirmar que hay una correlación entre las dos variables?
+
+### Porcentaje de Usuarios:
+
+data_usuarios <- data %>%
+  mutate("porcentaje_usuarios" = `Internet users`/Population * 100)
+
+### Gráfico de dispersión con las variables de velocidad promedio y porcentaje de usarios de internet:
+
+ggplot(data_usuarios, 
+       aes(x = `Avg \n(Mbit/s)Ookla`, y = porcentaje_usuarios)) + 
+  geom_point()
+
+### ¿Se podría afirmar que hay una correlación entre las dos variables?
+
+### Rta: Se evidencia que hay una correlación ascendente entre la velocidad del interne y el porcentaje de usuarios, aunque no se
+### se encuentra tan marcada, debido a que el incremento de cada variable es a diferente velocidad
+
+###5 Respecto al grafico, si existe correlación positiva entre las variables velocidad promedio y porcentaje de usarios
+data2 <- data%>%
+	  mutate("porcentaje” = `Internet users` / Population * 100)
+    ggplot(data2, aes(x = `Avg \n(Mbit/s)Ookla`,
+                  y = porcentaje)) +
+  geom_point()
+
+
+# ANEXOS: Se adjunta pantallazos de la consola, data y gráfico. ----
+# https://docs.google.com/document/d/1OiVccNIMTxPBV6riL1e47bcDYrc8ZeFhosEvyeMcbkY/edit?usp=sharing
