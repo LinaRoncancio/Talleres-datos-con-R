@@ -1,0 +1,49 @@
+## EJERCICIOS MODULO 4 
+
+## #Lina Roncancio - Fredy Gonzalez - Fabian Lasso
+
+library(ggplot2)
+library(tidyverse)
+library(patchwork)
+library(readxl)
+setwd('C:/Users/Lina/Desktop/')
+
+datos_musica <- read.csv("songs_normalize.csv")
+
+
+## 1. Elabore un gráfico de dispersión con las variables danceability y valence, 
+## que tenga los puntos de color azúl y una transparencia de 0.3.
+
+#Solución:
+ggplot(datos_musica, aes(x = danceability, y = valence)) +
+  geom_point(color = "blue",
+             alpha = 0.3)
+
+## 2. Elabore un boxplot con la variable mode en el eje x y la variable 
+##energy en el eje y. Asigne el color de las cajas de acuerdo con la 
+## variable mode y elimine la leyenda.
+
+#Solución:
+ggplot(datos_musica, aes(x = factor(mode), y = energy, colour = factor(mode))) +
+  geom_boxplot() +
+  labs (x = NULL)
+
+
+## 3. Usando el paquete {patchwork}, construya una salida gráfica con los 4 
+## gráficos anteriores de tal modo que aparezcan así:
+#Solución:
+
+p1 <- ggplot(datos_musica, aes(x = danceability, y = valence)) +
+  geom_point(color = "blue",
+             alpha = 0.3)
+
+p2 <- ggplot(datos_musica, aes(x = factor(mode), y = energy, colour = factor(mode))) +
+  geom_boxplot() +
+  labs (x = NULL)
+install.packages("patchwork")
+library(patchwork)
+
+p1 + p2
+
+Anexos:
+  https://docs.google.com/document/d/1Mx72-ergz5kA9rS3nkY50jnl7AVJRLHySlBvwTRt7lI/edit
